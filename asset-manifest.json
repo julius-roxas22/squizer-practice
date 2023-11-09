@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/squizer-practice/static/css/main.0d325693.css",
+    "main.js": "/squizer-practice/static/js/main.26cf1d4d.js",
+    "index.html": "/squizer-practice/index.html",
+    "main.0d325693.css.map": "/squizer-practice/static/css/main.0d325693.css.map",
+    "main.26cf1d4d.js.map": "/squizer-practice/static/js/main.26cf1d4d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0d325693.css",
+    "static/js/main.26cf1d4d.js"
+  ]
+}
