@@ -22,8 +22,21 @@ h5 {
     margin-bottom: 40px;
 }
 
-.text-title {
-    margin: 30px 0px
+.title_holder {
+    margin: 30px 0px;
+    display: flex;
+}
+
+.text--title {
+    margin-right: auto;
+}
+
+.text--score_pass {
+    color: #00AF36;
+}
+
+.text--score_fail {
+    color: #FF3C3C;
 }
 
 .question_holder {
@@ -35,6 +48,19 @@ h5 {
     color: rgb(0, 69, 160);
     font-weight: 500px;
     font-size: 19px;
+}
+
+.result_text--correct,
+.result_text--incorrect {
+    color: white;
+}
+
+.result_text--correct {
+    background-color: #00AF36;
+}
+
+.result_text--incorrect {
+    background-color: #FF3C3C;
 }
 
 .question_holder,
@@ -61,10 +87,6 @@ h5 {
     font-family: "Gliffy";
     margin-bottom: 30px;
     cursor: pointer;
-}
-
-.choices_holder:active {
-    box-shadow: inset 1px 3px 5px rgba(0, 0, 0, 0.116);
 }
 
 /* green color #00AF36 */

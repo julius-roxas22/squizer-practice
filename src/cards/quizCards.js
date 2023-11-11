@@ -1,4 +1,5 @@
 import Choices from '../choices/choices'
+import ResultStatus from '../components/result-status'
 
 export default function QuizCard(props) {
     return (
@@ -6,7 +7,7 @@ export default function QuizCard(props) {
             <div className='card--container'>
                 <div className='question_holder'>
                     <p className='question_text'>{props.quiz.question}</p>
-                    <p className='result_text'>Correct</p>
+                    {props.finishQuiz && <ResultStatus resultQuiz={props.resultQuiz} id={props.quiz.id} />}
                 </div>
                 <Choices choices={props.quiz.choices} question={props.quiz.question} id={props.quiz.id} setAnswer={props.setAnswer} />
             </div>
