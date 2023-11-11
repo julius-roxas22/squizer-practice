@@ -6,7 +6,7 @@ export default function Main() {
 
     const [answerObject, setAnswerObject] = React.useState([])
 
-    const [score, setScore] = React.useState(0)
+    const [listScore, setListScore] = React.useState([])
 
     const quizData = QuizData.map(quiz => {
         return (
@@ -14,17 +14,29 @@ export default function Main() {
         )
     })
 
-    function addAnswer(questionObject) {
+    React.useEffect(() => {
+
+        let array = []
 
         for (let i = 0; i < QuizData.length; i++) {
             for (let j = 0; j < answerObject.length; j++) {
                 const quiz = QuizData[i]
                 const myQuiz = answerObject[j]
-                if (quiz.id === myQuiz.id && quiz.correct_answer === myQuiz.myAnswer && quiz.question === myQuiz.question) {
-                    setScore(score + 1)
+                if (quiz.id === myQuiz.id) {
+                    if (quiz.question === myQuiz.question) {
+                        if (quiz.correct_answer === myQuiz.myAnswer) {
+                            array.push(1)
+                        }
+                    }
                 }
             }
         }
+
+        setListScore(array)
+
+    }, [answerObject])
+
+    function addAnswer(questionObject) {
 
         const { id, question, choice } = questionObject
 
@@ -47,11 +59,12 @@ export default function Main() {
     }
 
     function submitAnswer() {
-        console.log("Your Score: " + score)
-        if (answerObject.length > 0) {
-            answerObject.splice(0, answerObject.length)
-            setScore(0)
+
+        let currentScore = 0
+        for (let i = 0; i < listScore.length; i++) {
+            currentScore += listScore[i]
         }
+        console.log("Your Score: " + currentScore)
     }
 
     return (
