@@ -24,14 +24,25 @@ export default function Main() {
                 const myQuiz = answerObject[j]
                 if (quiz.id === myQuiz.id) {
                     if (quiz.question === myQuiz.question) {
+                        const isExist = result.some(res => res.id === quiz.id)
                         if (quiz.correct_answer === myQuiz.myAnswer) {
+                            if (!isExist) {
+                                addResult({ id: myQuiz.id, isCorrect: true })
+                            }
+                            else {
+                                addResult({ id: myQuiz.id, isCorrect: false })
+                            }
                             array.push(1)
-                            updateResult(myQuiz.id)
+                        } else if (quiz.correct_answer !== myQuiz.myAnswer) {
+                            if (!isExist) {
+                                addResult({ id: myQuiz.id, isCorrect: false })
+                            }
                         }
                     }
                 }
             }
         }
+
         setListScore(array)
     }, [answerObject])
 
@@ -44,6 +55,7 @@ export default function Main() {
             question: question,
             myAnswer: choice,
         }
+
         const isAnswerExist = answerObject.some(answer => id === answer.id)
         if (isAnswerExist) {
             setAnswerObject(oldAnswer => oldAnswer.map(ans => {
@@ -54,7 +66,6 @@ export default function Main() {
             setAnswerObject(oldAnswer => [...oldAnswer, addObjectAnswer])
         }
 
-        addResult({ id, isCorrect: false })
     }
 
     function addResult(question) {
@@ -67,7 +78,7 @@ export default function Main() {
 
     function updateResult(id) {
         setResult(oldResults => oldResults.map(result => {
-            return result.id === id ? { ...result, isCorrect: true } : result
+            return result.id === id ? { ...result, isCorrect: !result.isCorrect } : result
         }))
     }
 
@@ -78,6 +89,10 @@ export default function Main() {
             currentScore += listScore[i]
         }
         setScore(currentScore)
+
+        result.map(res => {
+            console.log(res.id + " " + res.isCorrect)
+        })
     }
 
     return (
