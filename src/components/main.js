@@ -1,7 +1,6 @@
 import QuizData from '../data/quiz'
 import QuizCards from '../cards/quizCards'
 import React from 'react'
-
 export default function Main() {
 
     const [answerObject, setAnswerObject] = React.useState([])
@@ -10,17 +9,46 @@ export default function Main() {
     const [result, setResult] = React.useState([])
     const [score, setScore] = React.useState(0)
 
-    const quizData = QuizData.map(quiz => {
+    const [quizObject, setQuizObject] = React.useState([])
+
+    const quizData = quizObject.map(quiz => {
         return (
             <QuizCards key={quiz.id} finishQuiz={finish} resultQuiz={result} quiz={quiz} setAnswer={addAnswer} />
         )
     })
 
     React.useEffect(() => {
-        let array = []
+
+        let quizDataArray = []
+        let choicesArray = []
         for (let i = 0; i < QuizData.length; i++) {
+            const quizObject = QuizData[i]
+            for (let j = 0; j < quizObject.choices.length; j++) {
+                choicesArray.push({
+                    id: quizObject.id,
+                    choice: quizObject.choices[j],
+                    isSelected: false
+                })
+            }
+            quizDataArray.push({
+                id: quizObject.id,
+                question: quizObject.question,
+                correct_answer: quizObject.correct_answer,
+                choices: []
+            })
+        }
+
+        const newQuiz = quizDataArray.map(quizes => {
+            const choice = choicesArray.filter(choice => choice.id === quizes.id)
+            return { ...quizes, choices: choice }
+        })
+
+        setQuizObject(newQuiz)
+
+        let array = []
+        for (let i = 0; i < quizObject.length; i++) {
             for (let j = 0; j < answerObject.length; j++) {
-                const quiz = QuizData[i]
+                const quiz = quizObject[i]
                 const myQuiz = answerObject[j]
                 if (quiz.id === myQuiz.id) {
                     if (quiz.question === myQuiz.question) {
@@ -47,7 +75,6 @@ export default function Main() {
     }, [answerObject])
 
     function addAnswer(questionObject) {
-
         const { id, question, choice } = questionObject
 
         const addObjectAnswer = {
@@ -66,6 +93,8 @@ export default function Main() {
             setAnswerObject(oldAnswer => [...oldAnswer, addObjectAnswer])
         }
 
+
+
     }
 
     function addResult(question) {
@@ -76,11 +105,11 @@ export default function Main() {
         }
     }
 
-    function updateResult(id) {
-        setResult(oldResults => oldResults.map(result => {
-            return result.id === id ? { ...result, isCorrect: !result.isCorrect } : result
-        }))
-    }
+    // function updateResult(id) {
+    //     setResult(oldResults => oldResults.map(result => {
+    //         return result.id === id ? { ...result, isCorrect: !result.isCorrect } : result
+    //     }))
+    // }
 
     function submitAnswer() {
         setFinish(true)
@@ -90,9 +119,6 @@ export default function Main() {
         }
         setScore(currentScore)
 
-        result.map(res => {
-            console.log(res.id + " " + res.isCorrect)
-        })
     }
 
     return (
@@ -100,7 +126,7 @@ export default function Main() {
             <div className='content'>
                 <div className='title_holder'>
                     <h1 className='text--title'>Squizer Game</h1>
-                    {finish && <h4 className={score >= 3 ? 'text--score_pass' : 'text--score_fail'}>{score} over {QuizData.length}</h4>}
+                    {finish && <h4 className={score >= 3 ? 'text--score_pass' : 'text--score_fail'}>{score} over {quizObject.length}</h4>}
                 </div>
                 <div className='content--body'>
                     {quizData}
