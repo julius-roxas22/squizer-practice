@@ -1,34 +1,40 @@
 const data = [
     {
-        id: 1,
+        type: "multiple",
+        difficult: "easy",
+        category: "Animals",
         question: "Main Color of Apple?",
         correct_answer: "Red",
-        choices:
+        incorrect_answers:
             [
                 "Black",
-                "Red",
+                "Orange",
                 "Blue",
             ]
     },
     {
-        id: 2,
+        type: "multiple",
+        difficult: "easy",
+        category: "Animals",
         question: "Who is the developer of this project?",
         correct_answer: "Julius Roxas",
-        choices:
+        incorrect_answers:
             [
-                "Julius Roxas",
+                "Dark",
                 "Anna Capria",
                 "Jhon Doe",
             ]
     },
     {
-        id: 3,
+        type: "multiple",
+        difficult: "easy",
+        category: "Animals",
         question: "Give Atleast one Hero that is the most hardest to use",
         correct_answer: "Meepo",
-        choices:
+        incorrect_answers:
             [
                 "Huskar",
-                "Meepo",
+                "Sunrise",
                 "Wisp IO",
             ]
     }

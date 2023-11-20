@@ -13,9 +13,9 @@ export default function Choices(props) {
             <button
                 key={index}
                 className={text}
-                onClick={() => props.setAnswer(
-                    { id: props.id, question: props.question, choice: choice.choice })}>
-                {choice.choice}
+                /**onClick={() => props.setAnswer(
+                    { id: props.id, question: props.question, choice: choice.choice })} */>
+                {choice.incorrect_answer}
             </button>
         )
     })

@@ -1,4 +1,4 @@
-import Choices from '../choices/choices'
+import InCorrectAnswersCards from '../choices/incorrect_answers'
 import ResultStatus from '../components/result-status'
 
 export default function QuizCard(props) {
@@ -6,10 +6,13 @@ export default function QuizCard(props) {
         <div className='card'>
             <div className='card--container'>
                 <div className='question_holder'>
-                    <p className='question_text'>{props.quiz.question}</p>
-                    {props.finishQuiz && <ResultStatus resultQuiz={props.resultQuiz} id={props.quiz.id} />}
+                    <p className='question_text'>{props.quizies.question}</p>
+                    {/* {props.finishQuiz && <ResultStatus resultQuiz={props.resultQuiz} id={props.quiz.id} />} */}
                 </div>
-                <Choices choices={props.quiz.choices} question={props.quiz.question} id={props.quiz.id} setAnswer={props.setAnswer} />
+                <InCorrectAnswersCards
+                    choices={props.quizies.incorrect_answers}
+                    question={props.quizies.question} id={props.quizies.questionId}
+                 /**setAnswer={props.setAnswer}*/ />
             </div>
         </div>
     )
