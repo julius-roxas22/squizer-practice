@@ -116,7 +116,11 @@ export default function Main() {
     //     console.log(choicesArray)
     // }
 
-    const [questionDataTrivia, setQuestionDataTrivia] = React.useState(QuizData)
+    const [questionDataTriviaList, setQuestionDataTriviaList] = React.useState(QuizData)
+    const [myAnswerObjectList, setObjectAnswerList] = React.useState([])
+    const [isFinishQuiz, setIsFinishQuiz] = React.useState(false)
+    const [resultQuizList, setResultQuizList] = React.useState([])
+    const [totalScore, setTotalScore] = React.useState(0)
 
     // React.useEffect(() => {
     //     fetch("https://opentdb.com/api.php?amount=3&category=27&difficulty=easy&type=multiple")
@@ -128,9 +132,9 @@ export default function Main() {
     let choicesArray = []
     let allQuizArray = []
 
-    for (let i = 0; i < questionDataTrivia.length; i++) {
+    for (let i = 0; i < questionDataTriviaList.length; i++) {
         const id = generateId()
-        const questionObject = questionDataTrivia[i]
+        const questionObject = questionDataTriviaList[i]
         for (let j = 0; j < questionObject.incorrect_answers.length; j++) {
             choicesArray.push({
                 questionId: id,
@@ -151,13 +155,11 @@ export default function Main() {
 
     for (let i = 0; i < allQuizArray.length; i++) {
         const quizObject = allQuizArray[i]
-
         const newObjectInCorrectAnswer = {
             questionId: quizObject.questionId,
             incorrect_answer: quizObject.correct_answer,
             isSelected: false
         }
-
         choicesArray.splice(Math.floor(Math.random() * choicesArray.length), 0, newObjectInCorrectAnswer)
     }
 
@@ -166,9 +168,17 @@ export default function Main() {
         return { ...quiz, incorrect_answers: choices }
     })
 
+    const [quizInitializer, setQuizInitializer] = React.useState(newQuizies)
 
-    const quizCard = newQuizies.map(quizies => {
-        return <QuizCards key={quizies.questionId} quizies={quizies} />
+    const quizCard = quizInitializer.map(quizies => {
+        return <QuizCards
+            key={quizies.questionId}
+            questionId={quizies.questionId}
+            quizies={quizies}
+            handleClickMyAnswer={handleClickMyAnswer}
+            isFinishQuiz={isFinishQuiz}
+            resultQuizList={resultQuizList}
+        />
     })
 
     function generateId() {
@@ -181,8 +191,70 @@ export default function Main() {
         return randCharacters
     }
 
-    function submitButton() {
+    function handleClickMyAnswer(myAnswerObject) {
 
+        //set the styles of choices
+        setSelectedStyles(myAnswerObject)
+
+        //add result in every question
+        addResult(myAnswerObject)
+
+        //add answer list
+        addMyAnswer(myAnswerObject)
+    }
+
+    function setSelectedStyles(myAnswerObject) {
+        const { questionId, myAnswer } = myAnswerObject
+        const quizObj = quizInitializer.find(quizObject => quizObject.questionId === questionId)
+        const selectedAnswer = quizObj.incorrect_answers.map(answer => {
+            return answer.incorrect_answer === myAnswer ? { ...answer, isSelected: true } : { ...answer, isSelected: false }
+        })
+        setQuizInitializer(allQuizies => allQuizies.map(quiz => {
+            return quiz.questionId === quizObj.questionId ? { ...quiz, incorrect_answers: selectedAnswer } : quiz
+        }))
+    }
+
+    function addResult(myAnswerObject) {
+        const { questionId, myAnswer } = myAnswerObject
+        const resultIsExist = resultQuizList.some(currentResults => currentResults.questionId === questionId)
+        const quizObject = quizInitializer.find(quizObject => quizObject.questionId === questionId)
+        if (resultIsExist) {
+            if (quizObject.correct_answer === myAnswer) {
+                setResultQuizList(currentResults => currentResults.map(result => {
+                    return result.questionId === questionId ? { ...result, isCorrect: true } : result
+                }))
+            } else {
+                setResultQuizList(currentResults => currentResults.map(result => {
+                    return result.questionId === questionId ? { ...result, isCorrect: false } : result
+                }))
+            }
+        } else {
+            if (quizObject.correct_answer === myAnswer) {
+                setResultQuizList(currentResults => [...currentResults, { questionId: questionId, isCorrect: true }])
+            } else {
+                setResultQuizList(currentResults => [...currentResults, { questionId: questionId, isCorrect: false }])
+            }
+        }
+    }
+
+    function addMyAnswer(myAnswerObject) {
+        const { questionId, myAnswer } = myAnswerObject
+        const myAnswerIsExist = myAnswerObjectList.some(currentAnswer => currentAnswer.questionId === questionId)
+        if (myAnswerIsExist) {
+            setObjectAnswerList(currentAnswers => currentAnswers.map(answer => {
+                return answer.questionId === questionId ? { ...answer, myAnswer: myAnswer } : answer
+            }))
+        } else {
+            setObjectAnswerList(currentAnswers => [...currentAnswers, myAnswerObject])
+        }
+    }
+
+    function submitButton() {
+        setIsFinishQuiz(true)
+        myAnswerObjectList.map(answer => {
+            console.log(answer.questionId + " " + answer.myAnswer)
+        })
+        console.log(totalScore)
     }
 
     return (

@@ -7,12 +7,14 @@ export default function QuizCard(props) {
             <div className='card--container'>
                 <div className='question_holder'>
                     <p className='question_text'>{props.quizies.question}</p>
-                    {/* {props.finishQuiz && <ResultStatus resultQuiz={props.resultQuiz} id={props.quiz.id} />} */}
+                    {props.isFinishQuiz && <ResultStatus
+                        resultQuizList={props.resultQuizList}
+                        questionId={props.quizies.questionId} />}
                 </div>
                 <InCorrectAnswersCards
-                    choices={props.quizies.incorrect_answers}
-                    question={props.quizies.question} id={props.quizies.questionId}
-                 /**setAnswer={props.setAnswer}*/ />
+                    quizies={props.quizies}
+                    incorrectAnswers={props.quizies.incorrect_answers}
+                    handleClickMyAnswer={props.handleClickMyAnswer} />
             </div>
         </div>
     )

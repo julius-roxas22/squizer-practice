@@ -81,7 +81,7 @@ h5 {
 .btn--default_selected {
     background-color: rgb(0, 69, 160);
     color: white;
-    border: none;
+    border: 1px solid transparent;
 }
 
 .btn_submit {
