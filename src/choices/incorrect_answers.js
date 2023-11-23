@@ -11,6 +11,7 @@ export default function Choices(props) {
 
         return (
             <button
+                disabled={props.isFinishQuiz}
                 key={index}
                 className={choice.isSelected ? 'btn--default_selected' : 'btn--default_choice'}
                 onClick={() => props.handleClickMyAnswer(
