@@ -26,12 +26,14 @@ export default function Main() {
             const id = generateId()
             const questionObject = questionDataTriviaList[i]
             for (let j = 0; j < questionObject.incorrect_answers.length; j++) {
+                // if (!choicesArray.some(choice => choice.questionId === id))
                 choicesArray.push({
                     questionId: id,
                     incorrect_answer: questionObject.incorrect_answers[j],
                     isSelected: false
                 })
             }
+            // if (!allQuizArray.some(quizArr => quizArr.questionId === id))
             allQuizArray.push({
                 questionId: id,
                 type: questionObject.type,
@@ -58,13 +60,16 @@ export default function Main() {
             return { ...quiz, incorrect_answers: choices }
         })
 
-        let randomQuestion = []
+        let randomQuestions = []
         for (let i = 0; i < 10; i++) {
             let randomNumber = Math.floor(Math.random() * newQuizies.length)
-            randomQuestion.push(newQuizies[randomNumber])
+            if (!randomQuestions.some(randQuestion => randQuestion.questionId === newQuizies[randomNumber].questionId)) {
+                randomQuestions.push(newQuizies[randomNumber])
+
+            }
         }
 
-        return randomQuestion
+        return randomQuestions
     }
 
     const [quizInitializer, setQuizInitializer] = React.useState(reInitializeData())
@@ -77,6 +82,7 @@ export default function Main() {
             handleClickMyAnswer={handleClickMyAnswer}
             isFinishQuiz={isFinishQuiz}
             resultQuizList={resultQuizList}
+            findResult={findResult}
         />
     })
 
@@ -114,26 +120,31 @@ export default function Main() {
     }
 
     function addResult(myAnswerObject) {
-        const { questionId, myAnswer } = myAnswerObject
-        const resultIsExist = resultQuizList.some(currentResults => currentResults.questionId === questionId)
-        const quizObject = quizInitializer.find(quizObject => quizObject.questionId === questionId)
-        if (resultIsExist) {
-            if (quizObject.correct_answer === myAnswer) {
-                setResultQuizList(currentResults => currentResults.map(result => {
-                    return result.questionId === questionId ? { ...result, isCorrect: true } : result
-                }))
-            } else {
-                setResultQuizList(currentResults => currentResults.map(result => {
-                    return result.questionId === questionId ? { ...result, isCorrect: false } : result
-                }))
-            }
-        } else {
-            if (quizObject.correct_answer === myAnswer) {
-                setResultQuizList(currentResults => [...currentResults, { questionId: questionId, isCorrect: true }])
-            } else {
-                setResultQuizList(currentResults => [...currentResults, { questionId: questionId, isCorrect: false }])
-            }
-        }
+        //auto add in result if the question is auto initialized
+        // const { questionId, myAnswer } = myAnswerObject
+        // const resultIsExist = resultQuizList.some(currentResults => currentResults.questionId === questionId)
+        // const quizObject = quizInitializer.find(quizObject => quizObject.questionId === questionId)
+        // if (resultIsExist) {
+        //     if (quizObject.correct_answer === myAnswer) {
+        //         setResultQuizList(currentResults => currentResults.map(result => {
+        //             return result.questionId === questionId ? { ...result, isCorrect: true } : result
+        //         }))
+        //     } else {
+        //         setResultQuizList(currentResults => currentResults.map(result => {
+        //             return result.questionId === questionId ? { ...result, isCorrect: false } : result
+        //         }))
+        //     }
+        // } else {
+        //     if (quizObject.correct_answer === myAnswer) {
+        //         setResultQuizList(currentResults => [...currentResults, { questionId: questionId, isCorrect: true }])
+        //     } else {
+        //         setResultQuizList(currentResults => [...currentResults, { questionId: questionId, isCorrect: false }])
+        //     }
+        // }
+    }
+
+    function findResult(questionId) {
+        return resultQuizList.find(result => result.questionId === questionId)
     }
 
     function addMyAnswer(myAnswerObject) {
@@ -167,16 +178,14 @@ export default function Main() {
             }
         }
         setTotalScore(score)
-
-        console.log(quizInitializer)
     }
 
     return (
         <main className='main'>
             <div className='content'>
                 <div className='title_holder'>
-                    <h1 className='text--title'>Squizer Game</h1>
-                    {isFinishQuiz && <h4 className={totalScore >= (questionDataTriviaList.length / 2) ? 'text--score_pass' : 'text--score_fail'}>{totalScore} over {questionDataTriviaList.length}</h4>}
+                    <h1 className='text--title'>Quiz Game</h1>
+                    {isFinishQuiz && <h4 className={totalScore >= (quizInitializer.length / 2) ? 'text--score_pass' : 'text--score_fail'}>{totalScore} over {quizInitializer.length}</h4>}
                 </div>
                 <div className='content--body'>
                     {quizCard}

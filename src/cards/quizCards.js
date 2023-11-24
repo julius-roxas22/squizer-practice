@@ -23,17 +23,20 @@ export default function QuizCard(props) {
         <div className='card'>
             <div className='card--container'>
                 <div className='question_holder'>
+                    <p className={quizType}>{props.quizies.difficulty}</p>
                     <p className='question_text'>{props.quizies.question}</p>
+                    {/* {props.isFinishQuiz && <p className='correct_answer'> {props.quizies.correct_answer} </p>} */}
+                    <p className='correct_answer_text'> {props.quizies.correct_answer} </p>
                     {props.isFinishQuiz && <ResultStatus
                         resultQuizList={props.resultQuizList}
                         questionId={props.quizies.questionId} />}
-                    <p className={quizType}>{props.quizies.difficulty}</p>
                 </div>
                 <InCorrectAnswersCards
                     isFinishQuiz={props.isFinishQuiz}
                     quizies={props.quizies}
                     incorrectAnswers={props.quizies.incorrect_answers}
-                    handleClickMyAnswer={props.handleClickMyAnswer} />
+                    handleClickMyAnswer={props.handleClickMyAnswer}
+                    findResult={props.findResult} />
             </div>
         </div>
     )
