@@ -7,9 +7,7 @@ export default function Main() {
     // const [questionDataTriviaList, setQuestionDataTriviaList] = React.useState([])
     const [myAnswerObjectList, setObjectAnswerList] = React.useState([])
     const [isFinishQuiz, setIsFinishQuiz] = React.useState(false)
-    const [resultQuizList, setResultQuizList] = React.useState([])
     const [totalScore, setTotalScore] = React.useState(0)
-
 
     // React.useEffect(() => {
     //     fetch("https://opentdb.com/api.php?amount=3&category=27&difficulty=easy&type=multiple")
@@ -26,14 +24,12 @@ export default function Main() {
             const id = generateId()
             const questionObject = questionDataTriviaList[i]
             for (let j = 0; j < questionObject.incorrect_answers.length; j++) {
-                // if (!choicesArray.some(choice => choice.questionId === id))
                 choicesArray.push({
                     questionId: id,
                     incorrect_answer: questionObject.incorrect_answers[j],
                     isSelected: false
                 })
             }
-            // if (!allQuizArray.some(quizArr => quizArr.questionId === id))
             allQuizArray.push({
                 questionId: id,
                 type: questionObject.type,
@@ -65,14 +61,23 @@ export default function Main() {
             let randomNumber = Math.floor(Math.random() * newQuizies.length)
             if (!randomQuestions.some(randQuestion => randQuestion.questionId === newQuizies[randomNumber].questionId)) {
                 randomQuestions.push(newQuizies[randomNumber])
-
             }
         }
-
         return randomQuestions
     }
 
     const [quizInitializer, setQuizInitializer] = React.useState(reInitializeData())
+
+    function autoReInitializedResult() {
+        let resultArray = []
+        for (let i = 0; i < quizInitializer.length; i++) {
+            const data = quizInitializer[i]
+            resultArray.push({ questionId: data.questionId, isCorrect: false })
+        }
+        return resultArray
+    }
+
+    const [resultQuizList, setResultQuizList] = React.useState(autoReInitializedResult())
 
     const quizCard = quizInitializer.map(quizies => {
         return <QuizCards
@@ -120,27 +125,22 @@ export default function Main() {
     }
 
     function addResult(myAnswerObject) {
-        //auto add in result if the question is auto initialized
-        // const { questionId, myAnswer } = myAnswerObject
-        // const resultIsExist = resultQuizList.some(currentResults => currentResults.questionId === questionId)
-        // const quizObject = quizInitializer.find(quizObject => quizObject.questionId === questionId)
-        // if (resultIsExist) {
-        //     if (quizObject.correct_answer === myAnswer) {
-        //         setResultQuizList(currentResults => currentResults.map(result => {
-        //             return result.questionId === questionId ? { ...result, isCorrect: true } : result
-        //         }))
-        //     } else {
-        //         setResultQuizList(currentResults => currentResults.map(result => {
-        //             return result.questionId === questionId ? { ...result, isCorrect: false } : result
-        //         }))
-        //     }
-        // } else {
-        //     if (quizObject.correct_answer === myAnswer) {
-        //         setResultQuizList(currentResults => [...currentResults, { questionId: questionId, isCorrect: true }])
-        //     } else {
-        //         setResultQuizList(currentResults => [...currentResults, { questionId: questionId, isCorrect: false }])
-        //     }
-        // }
+
+        const { questionId, myAnswer } = myAnswerObject
+        const resultObj = resultQuizList.find(currentResults => currentResults.questionId === questionId)
+        const quizObject = quizInitializer.find(quizObject => quizObject.questionId === questionId)
+
+        if (resultObj.questionId === quizObject.questionId) {
+            if (quizObject.correct_answer === myAnswer) {
+                setResultQuizList(oldResultList => oldResultList.map(result => {
+                    return result.questionId === questionId ? { ...result, isCorrect: true } : result
+                }))
+            } else {
+                setResultQuizList(oldResultList => oldResultList.map(result => {
+                    return result.questionId === questionId ? { ...result, isCorrect: false } : result
+                }))
+            }
+        }
     }
 
     function findResult(questionId) {
@@ -161,10 +161,6 @@ export default function Main() {
 
     function submitButton() {
         setIsFinishQuiz(true)
-        myAnswerObjectList.map(answer => {
-            console.log(answer.questionId + " " + answer.myAnswer)
-        })
-
         let score = 0
         for (let i = 0; i < quizInitializer.length; i++) {
             const quizInitObject = quizInitializer[i]
