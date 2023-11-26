@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/squizer-practice/static/css/main.0d325693.css",
-    "main.js": "/squizer-practice/static/js/main.26cf1d4d.js",
+    "main.css": "/squizer-practice/static/css/main.06dcaf8f.css",
+    "main.js": "/squizer-practice/static/js/main.459e2d72.js",
     "index.html": "/squizer-practice/index.html",
-    "main.0d325693.css.map": "/squizer-practice/static/css/main.0d325693.css.map",
-    "main.26cf1d4d.js.map": "/squizer-practice/static/js/main.26cf1d4d.js.map"
+    "main.06dcaf8f.css.map": "/squizer-practice/static/css/main.06dcaf8f.css.map",
+    "main.459e2d72.js.map": "/squizer-practice/static/js/main.459e2d72.js.map"
   },
   "entrypoints": [
-    "static/css/main.0d325693.css",
-    "static/js/main.26cf1d4d.js"
+    "static/css/main.06dcaf8f.css",
+    "static/js/main.459e2d72.js"
   ]
 }
