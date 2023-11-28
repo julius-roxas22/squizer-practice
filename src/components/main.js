@@ -88,6 +88,7 @@ export default function Main() {
             isFinishQuiz={isFinishQuiz}
             resultQuizList={resultQuizList}
             findResult={findResult}
+            findAnswer={findAnswer}
         />
     })
 
@@ -141,6 +142,10 @@ export default function Main() {
                 }))
             }
         }
+    }
+
+    function findAnswer(questionId) {
+        return myAnswerObjectList.find(allAnswers => allAnswers.questionId === questionId)
     }
 
     function findResult(questionId) {
