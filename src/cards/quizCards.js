@@ -37,7 +37,6 @@ export default function QuizCard(props) {
                     incorrectAnswers={props.quizies.incorrect_answers}
                     handleClickMyAnswer={props.handleClickMyAnswer}
                     findResult={props.findResult}
-                    findAnswer={props.findAnswer}
                 />
 
             </div>
